@@ -15,6 +15,7 @@ class Activity(models.Model):
     name = models.CharField(max_length=200)
     activity_type = models.CharField(max_length=20, choices=TYPE_CHOICES)
     location = models.CharField(max_length=255)
+    google_maps_address = models.CharField(max_length=255,default="null")
     description = models.TextField()
     image = models.ImageField(upload_to='activities/')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -55,3 +56,13 @@ class Review(models.Model):
     rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)]) # Оценка од 1 до 5
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+
+class GalleryImage(models.Model):
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, related_name='gallery')
+    image = models.ImageField(upload_to='activities/gallery/')
+    caption = models.CharField(max_length=100, blank=True) # Опционален опис на сликата
+
+    def __str__(self):
+        return f"Image for {self.activity.name}"

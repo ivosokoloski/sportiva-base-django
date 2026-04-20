@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Activity, TimeSlot, Reservation, Review
+from .models import Activity, TimeSlot, Reservation, Review, GalleryImage
+
 
 # Ова овозможува додавање термини директно во страната на Активноста
 class TimeSlotInline(admin.TabularInline):
@@ -12,13 +13,18 @@ class ReviewInline(admin.TabularInline):
     extra = 0
     readonly_fields = ('user', 'rating', 'comment') # Рецензиите обично само ги читаме во админ
 
+
+class GalleryImageInline(admin.TabularInline):
+    model = GalleryImage
+    extra = 3
+
+
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
-    list_display = ('name', 'activity_type', 'location', 'created_at')
+    list_display = ('name', 'activity_type', 'location', 'created_at','google_maps_address')
     list_filter = ('activity_type',)
     search_fields = ('name', 'location')
-    inlines = [TimeSlotInline, ReviewInline]
-
+    inlines = [TimeSlotInline, ReviewInline, GalleryImageInline]
 @admin.register(TimeSlot)
 class TimeSlotAdmin(admin.ModelAdmin):
     list_display = ('activity', 'start_time', 'end_time', 'capacity', 'is_full')
