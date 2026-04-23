@@ -1,8 +1,6 @@
 from rest_framework import generics
-
-from .models import Activity
-from .models import Review
-from .serializers import ActivitySerializer
+from .models import Activity, Review  # Провери дали е вака
+from .serializers import ActivitySerializer, ReviewSerializer # Додај го ReviewSerializer ако го имаш
 
 
 class ActivityList(generics.ListCreateAPIView):
@@ -10,6 +8,11 @@ class ActivityList(generics.ListCreateAPIView):
     serializer_class = ActivitySerializer
 
 
-class ReviewList(generics.ListCreateAPIView):
+class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Activity.objects.all()
+    serializer_class = ActivitySerializer
+
+
+class ReviewList(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
     serializer_class = ActivitySerializer

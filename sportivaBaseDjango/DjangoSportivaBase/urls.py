@@ -1,6 +1,9 @@
 from django.urls import path
-from .views import ActivityList # Сега работи со точка бидејќи се во иста папка
+from .views import ActivityList, ActivityDetail  # Додај го и ActivityDetail овде
 
 urlpatterns = [
     path('activities/', ActivityList.as_view(), name='activity-list'),
+
+    # ОВАА ЛИНИЈА ТИ ФАЛИ:
+    path('activities/<int:pk>/', ActivityDetail.as_view(), name='activity-detail'),
 ]
