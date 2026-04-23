@@ -3,10 +3,10 @@ from django.db.models import Avg
 from .models import Activity, TimeSlot, Review, GalleryImage
 
 
-# Прво дефинирај го ReviewSerializer за да можеш да го користиш во views
+
 class ReviewSerializer(serializers.ModelSerializer):
     user_name = serializers.ReadOnlyField(
-        source='user.username')  # Го додаваме ова за да го видиш името на тој што оставил коментар
+        source='user.username')
 
     class Meta:
         model = Review
@@ -26,11 +26,11 @@ class GalleryImageSerializer(serializers.ModelSerializer):
 
 
 class ActivitySerializer(serializers.ModelSerializer):
-    # Овие линии овозможуваат React да ги види сите слики и термини во еден JSON објект
+
     gallery = GalleryImageSerializer(many=True, read_only=True)
     slots = TimeSlotSerializer(many=True, read_only=True)
 
-    # Ако сакаш и рецензиите да се гледаат во деталите на активноста:
+
     reviews = ReviewSerializer(many=True, read_only=True)
 
     average_rating = serializers.SerializerMethodField()

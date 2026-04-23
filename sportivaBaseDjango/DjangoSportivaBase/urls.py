@@ -4,6 +4,6 @@ from .views import ActivityList, ActivityDetail  # Додај го и ActivityDe
 urlpatterns = [
     path('activities/', ActivityList.as_view(), name='activity-list'),
 
-    # ОВАА ЛИНИЈА ТИ ФАЛИ:
+
     path('activities/<int:pk>/', ActivityDetail.as_view(), name='activity-detail'),
 ]
