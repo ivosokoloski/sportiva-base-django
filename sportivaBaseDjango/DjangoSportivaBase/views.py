@@ -1,6 +1,15 @@
 from rest_framework import generics
-from .models import Activity, Review  # Провери дали е вака
-from .serializers import ActivitySerializer, ReviewSerializer # Додај го ReviewSerializer ако го имаш
+from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
+from .models import Activity, Review
+from .serializers import ActivitySerializer, ReviewSerializer, RegisterSerializer
+
+
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = RegisterSerializer
 
 
 class ActivityList(generics.ListCreateAPIView):
@@ -13,6 +22,7 @@ class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ActivitySerializer
 
 
+
 class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
-    serializer_class = ActivitySerializer
+    serializer_class = ReviewSerializer
