@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.db.models import Avg
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from .models import Activity, TimeSlot, Review, GalleryImage
-
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -19,6 +19,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_name = serializers.ReadOnlyField(source='user.username')
