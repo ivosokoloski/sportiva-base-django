@@ -1,38 +1,54 @@
 from rest_framework import serializers
 from django.db.models import Avg
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from .models import Activity, TimeSlot, Review, GalleryImage
 
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
 
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),
+            password=validated_data['password']
+        )
+        return user
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Incorrect Credentials")
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user_name = serializers.ReadOnlyField(
-        source='user.username')
-
+    user_name = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Review
         fields = ['id', 'user_name', 'rating', 'comment', 'created_at']
-
 
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
         fields = '__all__'
 
-
 class GalleryImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryImage
         fields = ['id', 'image', 'caption']
 
-
 class ActivitySerializer(serializers.ModelSerializer):
-
     gallery = GalleryImageSerializer(many=True, read_only=True)
     slots = TimeSlotSerializer(many=True, read_only=True)
-
-
     reviews = ReviewSerializer(many=True, read_only=True)
-
     average_rating = serializers.SerializerMethodField()
     reviews_count = serializers.SerializerMethodField()
 
