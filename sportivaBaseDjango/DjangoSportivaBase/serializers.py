@@ -18,6 +18,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
+    def get_users_count(self):
+        return User.objects.count()
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -28,6 +30,7 @@ class LoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     user_name = serializers.ReadOnlyField(source='user.username')
