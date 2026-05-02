@@ -6,8 +6,31 @@ from rest_framework.authtoken.models import Token as AuthToken
 from django.contrib.auth.models import User
 from .models import Activity, Review
 from .serializers import ActivitySerializer, ReviewSerializer, RegisterSerializer, LoginSerializer
+from django.shortcuts import render
+from .models import Activity, TimeSlot
+from datetime import datetime, time, timedelta
+from django.utils import timezone
 
 
+def generate_slots_for_week():
+    activities = Activity.objects.all()
+    today = timezone.now().date()
+
+    for i in range(7):
+        target_date = today + timedelta(days=i)
+
+        for activity in activities:
+            for hour in range(10, 22):
+                start_dt = timezone.make_aware(datetime.combine(target_date, time(hour, 0)))
+                end_dt = timezone.make_aware(datetime.combine(target_date, time(hour + 1, 0)))
+
+                # get_or_create за да не прави дупликати ако веќе постојат
+                TimeSlot.objects.get_or_create(
+                    activity=activity,
+                    start_time=start_dt,
+                    end_time=end_dt,
+                    defaults={'capacity': 10}
+                )
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -33,6 +56,13 @@ class ActivityList(generics.ListCreateAPIView):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
 
+    def get(self, request, *args, **kwargs):
+        today = timezone.now().date()
+        if not TimeSlot.objects.filter(start_time__date=today).exists():
+            generate_slots_for_week()
+
+        return super().get(request, *args, **kwargs)
+
 
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
@@ -48,3 +78,4 @@ class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
 class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
