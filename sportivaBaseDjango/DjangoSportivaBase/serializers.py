@@ -55,6 +55,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     average_rating = serializers.SerializerMethodField()
     reviews_count = serializers.SerializerMethodField()
 
+
     class Meta:
         model = Activity
         fields = [

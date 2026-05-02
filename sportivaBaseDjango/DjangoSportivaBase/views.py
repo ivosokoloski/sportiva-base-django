@@ -56,6 +56,7 @@ class ActivityList(generics.ListCreateAPIView):
     queryset = Activity.objects.all()
     serializer_class = ActivitySerializer
 
+
     def get(self, request, *args, **kwargs):
         today = timezone.now().date()
         if not TimeSlot.objects.filter(start_time__date=today).exists():
