@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from .models import Activity, Review
-from .serializers import ActivitySerializer, ReviewSerializer, RegisterSerializer, LoginSerializer
+from .models import Activity, Review, Reservation
+from .serializers import ActivitySerializer, ReviewSerializer, RegisterSerializer, LoginSerializer, \
+    ReservationSerializer
 from django.shortcuts import render
 from .models import Activity, TimeSlot
 from datetime import datetime, time, timedelta
@@ -82,4 +83,9 @@ class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
 class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+class ReservationList(generics.ListCreateAPIView):
+    queryset = Reservation.objects.all()
+    serializer_class = ReservationSerializer
+
 

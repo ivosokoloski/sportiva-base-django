@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.db.models import Avg
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import Activity, TimeSlot, Review, GalleryImage
+from .models import Activity, TimeSlot, Review, GalleryImage, Reservation
+
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -38,6 +39,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         fields = ['id', 'user_name', 'rating', 'comment', 'created_at']
 
+
+class ReservationSerializer(serializers.ModelSerializer):
+    user_name = serializers.ReadOnlyField(source='user.username')
+    class Meta:
+        model = Reservation
+        fields = ['id', 'user_name', 'timeslot', 'reserved_at', 'status']
+
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
@@ -52,6 +60,7 @@ class ActivitySerializer(serializers.ModelSerializer):
     gallery = GalleryImageSerializer(many=True, read_only=True)
     slots = TimeSlotSerializer(many=True, read_only=True)
     reviews = ReviewSerializer(many=True, read_only=True)
+    reservations=ReservationSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
     reviews_count = serializers.SerializerMethodField()
 
@@ -61,7 +70,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'activity_type', 'location',
             'google_maps_address', 'description', 'image',
-            'gallery', 'slots', 'reviews', 'average_rating', 'reviews_count'
+            'gallery', 'slots', 'reviews','reservations', 'average_rating', 'reviews_count'
         ]
 
     def get_average_rating(self, obj):
