@@ -1,6 +1,6 @@
 # Sportiva Base
 
-[🔗 Go to Frontend Repository (React)](https://github.com/ivosokoloski/sportiva-baase)
+[🔗 Go to Frontend Repository (React)](https://github.com/ivosokoloski/sportiva-base)
 
 **Sportiva Base** is a specialized web platform designed for mapping and managing information about sports centers and gyms in Prilep. The project combines the robust data management capabilities of Django with the dynamic nature of React for a modern user experience.
 
