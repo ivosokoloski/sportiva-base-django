@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Activity, TimeSlot, Reservation, Review, GalleryImage
+from .models import Activity, TimeSlot, Reservation, Review, GalleryImage, Service
 
 
 # Ова овозможува додавање термини директно во страната на Активноста
@@ -18,6 +18,8 @@ class GalleryImageInline(admin.TabularInline):
     model = GalleryImage
     extra = 3
 
+
+admin.site.register(Service)
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):

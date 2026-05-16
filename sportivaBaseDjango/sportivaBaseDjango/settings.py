@@ -76,6 +76,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sportivaBaseDjango.wsgi.application'
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

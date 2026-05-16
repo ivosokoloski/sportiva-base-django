@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.db.models import Avg
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
-from .models import Activity, TimeSlot, Review, GalleryImage, Reservation
+from .models import Activity, TimeSlot, Review, GalleryImage, Reservation, Service
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -56,6 +56,12 @@ class GalleryImageSerializer(serializers.ModelSerializer):
         model = GalleryImage
         fields = ['id', 'image', 'caption']
 
+class ServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Service
+        fields = ['id', 'name','icon']
+
+
 class ActivitySerializer(serializers.ModelSerializer):
     gallery = GalleryImageSerializer(many=True, read_only=True)
     slots = TimeSlotSerializer(many=True, read_only=True)
@@ -63,6 +69,8 @@ class ActivitySerializer(serializers.ModelSerializer):
     reservations=ReservationSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
     reviews_count = serializers.SerializerMethodField()
+    services = ServiceSerializer(many=True, read_only=True)
+
 
 
     class Meta:
@@ -70,7 +78,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'activity_type', 'location',
             'google_maps_address', 'description', 'image',
-            'gallery', 'slots', 'reviews','reservations', 'average_rating', 'reviews_count'
+            'gallery', 'slots', 'reviews','reservations', 'average_rating', 'reviews_count','services'
         ]
 
     def get_average_rating(self, obj):
@@ -79,3 +87,4 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     def get_reviews_count(self, obj):
         return obj.reviews.count()
+

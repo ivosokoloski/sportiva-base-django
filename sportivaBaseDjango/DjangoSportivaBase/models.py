@@ -5,6 +5,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
+class Service(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    icon = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.name
+
 class Activity(models.Model):
     TYPE_CHOICES = [
         ('gym', 'Gym'),
@@ -19,6 +27,7 @@ class Activity(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='activities/')
     created_at = models.DateTimeField(auto_now_add=True)
+    services = models.ManyToManyField('Service', blank=True, related_name='activities')
 
     def __str__(self):
         return self.name
@@ -66,3 +75,8 @@ class GalleryImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.activity.name}"
+
+
+
+
+
