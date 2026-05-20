@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Activity, Review, Reservation
@@ -84,8 +84,25 @@ class ReviewList(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
+class ReviewView(generics.CreateAPIView):
+    queryset = Review.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ReviewSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 class ReservationList(generics.ListCreateAPIView):
     queryset = Reservation.objects.all()
     serializer_class = ReservationSerializer
+
+class ReservationView(generics.CreateAPIView):
+    queryset = Reservation.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ReservationSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
 
 

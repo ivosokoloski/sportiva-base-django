@@ -37,7 +37,19 @@ class ReviewSerializer(serializers.ModelSerializer):
     user_name = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Review
-        fields = ['id', 'user_name', 'rating', 'comment', 'created_at']
+        fields = ['id','activity', 'user_name', 'rating', 'comment', 'created_at']
+        read_only_fields = ['id', 'created_at']
+
+        def create(self, validated_data):
+            review = Review.objects.create(
+                id=validated_data['id'],
+                user_name=validated_data['user_name'],
+                rating=validated_data['rating'],
+                comment=validated_data['comment'],
+                activity=validated_data['activity'],
+            )
+            return review
+
 
 
 class ReservationSerializer(serializers.ModelSerializer):
@@ -45,6 +57,18 @@ class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
         fields = ['id', 'user_name', 'timeslot', 'reserved_at', 'status']
+        read_only_fields = ['id', 'reserved_at', 'status']
+
+        def create(self, validated_data):
+            reservation = Reservation.objects.create(
+                id=validated_data['id'],
+                user_name=validated_data['user_name'],
+                timeslot=validated_data['timeslot'],
+                reserved_at=validated_data['reserved_at'],
+                status=validated_data['status'],
+            )
+            return reservation
+
 
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
@@ -87,4 +111,6 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     def get_reviews_count(self, obj):
         return obj.reviews.count()
+
+
 

@@ -44,6 +44,17 @@ INSTALLED_APPS = [
     'corsheaders',
 
 ]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # Ако користиш стандардни DRF Токени (каде во React праќаш "Token <token>"):
+        'rest_framework.authentication.TokenAuthentication',
+
+        # Или ако користиш JWT (каде во React праќаш "Bearer <token>"):
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # Мора да биде најгоре
