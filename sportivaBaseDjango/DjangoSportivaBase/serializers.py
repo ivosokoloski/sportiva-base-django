@@ -56,7 +56,7 @@ class ReservationSerializer(serializers.ModelSerializer):
     user_name = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Reservation
-        fields = ['id', 'user_name', 'timeslot', 'reserved_at', 'status']
+        fields = ['id', 'user_name', 'timeslot', 'reserved_at', 'status','sportType']
         read_only_fields = ['id', 'reserved_at', 'status']
 
         def create(self, validated_data):
@@ -66,6 +66,7 @@ class ReservationSerializer(serializers.ModelSerializer):
                 timeslot=validated_data['timeslot'],
                 reserved_at=validated_data['reserved_at'],
                 status=validated_data['status'],
+                sportType=validated_data['sportType']
             )
             return reservation
 

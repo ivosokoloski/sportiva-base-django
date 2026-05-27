@@ -28,6 +28,7 @@ class Activity(models.Model):
     image = models.ImageField(upload_to='activities/')
     created_at = models.DateTimeField(auto_now_add=True)
     services = models.ManyToManyField('Service', blank=True, related_name='activities')
+    sportType=models.CharField(null=True,blank=True)
 
     def __str__(self):
         return self.name
@@ -50,6 +51,8 @@ class Reservation(models.Model):
     timeslot = models.ForeignKey(TimeSlot, on_delete=models.CASCADE)
     reserved_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default='confirmed') # confirmed, canceled
+    sportType=models.CharField(null=True,blank=True)
+
 
     class Meta:
         unique_together = ('user', 'timeslot') # Спречува ист корисник да резервира ист термин двапати
