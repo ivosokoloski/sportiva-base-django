@@ -4,6 +4,23 @@
 
 **Sportiva Base** is a specialized web platform designed for mapping and managing information about sports centers and gyms in Prilep. The project combines the robust data management capabilities of Django with the dynamic nature of React for a modern user experience.
 
+#### 1. Frontend (React)
+Navigate to the frontend directory, install the dependencies, and start the development server:
+```bash
+npm install
+npm run dev
+```
+
+#### 🔹 Backend (Django)
+1. Navigate to the backend directory.
+2. Install the required dependencies (ensure your virtual environment is active).
+3. Run the migrations and start the development server:
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+
 ---
 
 ### 📌 Description
